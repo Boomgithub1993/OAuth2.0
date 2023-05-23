@@ -1,0 +1,35 @@
+﻿@using Microsoft.AspNetCore.Authentication
+
+
+@if (User.Identity.IsAuthenticated)
+{
+    <h2>Claims</h2>
+
+    <dl>
+        @foreach (var claim in User.Claims)
+        {
+            <dt>@claim.Type</dt>
+            <dd>@claim.Value</dd>
+        }
+    </dl>
+
+    <h2>Properties</h2>
+
+    <dl>
+        @foreach (var prop in (await Context.AuthenticateAsync()).Properties.Items)
+        {
+            <dt>@prop.Key</dt>
+            <dd>@prop.Value</dd>
+        }
+    </dl>
+    <p><a class="btn btn-danger" asp-controller="Home" asp-action="Logout">Logout</a></p>
+}
+
+@if (!User.Identity.IsAuthenticated)
+{
+    <div class="text-center">
+        <h2 class="display-2">Welcome</h2>
+        <h2 class="display-2">Service Provider</h2>
+        <p><a class="btn btn-primary btn-block mt-3" asp-controller="Account" asp-action="Login">Login</a></p>
+    </div>
+}

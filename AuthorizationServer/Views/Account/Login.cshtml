@@ -1,0 +1,37 @@
+@model AuthorizationServer.ViewModels.LoginViewModel
+
+<partial name="_ValidationSummary" />
+
+   @if (Model.EnableLocalLogin)
+    {
+       <form asp-route="Login">
+       <input type="hidden" asp-for="ReturnUrl" />
+
+        <div class="card">
+            <input type="text" class="form-control form-control-lg" placeholder="Username" asp-for="Username" autofocus>
+            <input type="password" class="form-control form-control-lg form-control-last" placeholder="Password" asp-for="Password">
+        </div>
+
+        <button type="submit" class="btn btn-dark btn-block mt-3" name="button" value="login">Login</button>
+       </form>
+    }
+
+    @if (Model.VisibleExternalProviders.Any())
+    {
+        @foreach (var provider in Model.VisibleExternalProviders)
+        {
+        <a class="btn btn-primary btn-block mt-3" asp-controller="External" asp-action="Challenge" asp-route-scheme="@provider.AuthenticationScheme" asp-route-returnUrl="@Model.ReturnUrl" name="provider" >
+            Login With @provider.DisplayName
+        </a>
+        }
+    }
+
+    @if (!Model.EnableLocalLogin && !Model.VisibleExternalProviders.Any())
+    {
+        <div class="alert alert-warning">
+            <strong>Invalid login request</strong>
+            There are no login schemes configured for this request.
+        </div>
+    }
+
+
