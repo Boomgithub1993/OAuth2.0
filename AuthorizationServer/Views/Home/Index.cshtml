@@ -6,6 +6,13 @@
     var issued = authenticationResult.Properties.Items[".issued"];
     var expires = authenticationResult.Properties.Items[".expires"];
     <div>
+        <div class="row mb-3">
+            <div class="col text-center">
+                <h1>
+                    Authorization Server
+                </h1>
+            </div>
+        </div>
         <p>You are signed in as</p>
         <h2>@User.Identity.Name</h2>
         <hr/>
@@ -24,6 +31,13 @@
 @if (!User.Identity.IsAuthenticated)
 {
     <div>
+        <div class="row mb-3">
+            <div class="col text-center">
+                <h1>
+                    Authorization Server
+                </h1>
+            </div>
+        </div>
         <p>You are not signed in</p>
         <p><a class="btn btn-sm btn-dark" asp-controller="Account" asp-action="Login">Sign in</a></p>
     </div>

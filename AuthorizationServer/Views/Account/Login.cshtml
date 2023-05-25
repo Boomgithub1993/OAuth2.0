@@ -1,37 +1,67 @@
 @model AuthorizationServer.ViewModels.LoginViewModel
 
-<partial name="_ValidationSummary" />
 
-   @if (Model.EnableLocalLogin)
-    {
-       <form asp-route="Login">
-       <input type="hidden" asp-for="ReturnUrl" />
+<body class="hold-transition login-page">
 
+    <div class="login-box">
         <div class="card">
-            <input type="text" class="form-control form-control-lg" placeholder="Username" asp-for="Username" autofocus>
-            <input type="password" class="form-control form-control-lg form-control-last" placeholder="Password" asp-for="Password">
+            <div class="card-body login-card-body">
+                <div class="login-logo">
+                    <b>Authorization Server</b>
+                </div>
+                    <partial name="_ValidationSummary" />
+                <p class="login-box-msg">Sign in to start your session</p>
+                @if (Model.EnableLocalLogin)
+                {
+                    <form asp-route="Login">
+                    <input type="hidden" asp-for="ReturnUrl" />
+                        <div class="input-group mb-3">
+                            <input type="text" asp-for="Username" class="form-control" placeholder="Username" autofocus>
+                            <div class="input-group-append">
+                                <div class="input-group-text">
+                                    <span class="fas fa-envelope"></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="input-group mb-3">
+                            <input type="password" asp-for="Password" class="form-control" placeholder="Password">
+                            <div class="input-group-append">
+                                <div class="input-group-text">
+                                    <span class="fas fa-lock"></span>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row justify-content-md-center">
+                            <div class="col-md-auto">
+                                <button class="btn btn-primary btn-block" type="submit" value="Login">Sign In</button>
+                            </div>
+                        </div>
+                    </form>
+                }
+
+                @if (Model.VisibleExternalProviders.Any())
+                {
+                    <div class="social-auth-links text-center mb-3">
+                        <p>- OR -</p>
+                        @foreach (var provider in Model.VisibleExternalProviders)
+                        {
+                            <a class="btn btn-block btn-danger" asp-controller="External" asp-action="Challenge" asp-route-scheme="@provider.AuthenticationScheme" asp-route-returnUrl="@Model.ReturnUrl" name="provider">
+                                <i class="fab fa-google-plus mr-2"></i>
+                                Sign in using @provider.DisplayName +
+                            </a>
+                        }
+                    </div>
+                }
+
+                @if (!Model.EnableLocalLogin && !Model.VisibleExternalProviders.Any())
+                {
+                    <div class="alert alert-warning">
+                        <strong>Invalid login request</strong>
+                        There are no login schemes configured for this request.
+                    </div>
+                }
+
+            </div>
         </div>
-
-        <button type="submit" class="btn btn-dark btn-block mt-3" name="button" value="login">Login</button>
-       </form>
-    }
-
-    @if (Model.VisibleExternalProviders.Any())
-    {
-        @foreach (var provider in Model.VisibleExternalProviders)
-        {
-        <a class="btn btn-primary btn-block mt-3" asp-controller="External" asp-action="Challenge" asp-route-scheme="@provider.AuthenticationScheme" asp-route-returnUrl="@Model.ReturnUrl" name="provider" >
-            Login With @provider.DisplayName
-        </a>
-        }
-    }
-
-    @if (!Model.EnableLocalLogin && !Model.VisibleExternalProviders.Any())
-    {
-        <div class="alert alert-warning">
-            <strong>Invalid login request</strong>
-            There are no login schemes configured for this request.
-        </div>
-    }
-
-
+    </div>
+</body>
